@@ -1,0 +1,35 @@
+.sensorItem {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.sensorName {
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sensorInput {
+  padding: 4px;
+}
+
+.editSensorControls {
+  display: flex;
+  gap: 6px;
+
+  button {
+    background: #1c912d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background: #259c33;
+    }
+  }
+}
