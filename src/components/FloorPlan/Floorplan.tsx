@@ -1,14 +1,28 @@
+import React from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import Sensor from "../Sensor/Sensor.tsx";
-import type { SensorType } from "../../App.tsx";
+import Sensor from "../Sensor/Sensor";
+import type { SensorType } from "../../App";
 import floorplan from "/test_floorplan01.png";
 import styles from "./Floorplan.module.css";
 
 type FloorplanProps = {
   sensors: SensorType[];
+  addNewSensorEnabled: boolean;
+  onAddNewSensor: (e: React.MouseEvent) => void;
+  onUpdateSensorPosition: (
+    sensorId: number,
+    newPosition: { x: number; y: number },
+  ) => void;
+  imageContainerRef: React.RefObject<HTMLDivElement | null>;
 };
 
-const Floorplan = ({ sensors }: FloorplanProps) => {
+const Floorplan = ({
+  sensors,
+  addNewSensorEnabled = false,
+  onAddNewSensor,
+  onUpdateSensorPosition,
+  imageContainerRef,
+}: FloorplanProps) => {
   return (
     <TransformWrapper
       initialScale={1}
@@ -23,14 +37,23 @@ const Floorplan = ({ sensors }: FloorplanProps) => {
             <button onClick={() => resetTransform()}>Reset Zoom</button>
           </div>
           <TransformComponent>
-            <div>
+            <div
+              ref={imageContainerRef}
+              onClick={addNewSensorEnabled ? onAddNewSensor : undefined}
+              style={addNewSensorEnabled ? { cursor: "crosshair" } : undefined}
+            >
               <img
                 src={floorplan}
-                alt="Floorplan name goes here"
+                alt="Floorplan name goes here" // FIXME
                 className={styles.floorplanImage}
               />
               {sensors.map((sensor, index) => (
-                <Sensor sensor={sensor} key={sensor.id} marker={index + 1} />
+                <Sensor
+                  key={sensor.id}
+                  sensor={sensor}
+                  label={(index + 1).toString()}
+                  onDrag={onUpdateSensorPosition}
+                />
               ))}
             </div>
           </TransformComponent>

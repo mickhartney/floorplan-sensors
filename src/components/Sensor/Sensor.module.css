@@ -2,6 +2,7 @@
   position: absolute;
   width: 26px;
   height: 26px;
+  transform: translate(-50%, -50%);
   background: red;
   color: white;
   font-weight: bold;
@@ -9,5 +10,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: grab; /* TODO: grab | crosshair */
 }

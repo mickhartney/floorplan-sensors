@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import type { SensorType } from "../../App.tsx";
+import type { SensorType } from "../../App";
 import styles from "./SensorItemDetails.module.css";
 
 type SensorItemDetailsProps = {
@@ -22,10 +22,6 @@ const SensorItemDetails = ({
       inputRef.current.select();
     }
   }, [isEditing]);
-
-  const handleEditSensorDetails = () => {
-    setIsEditing(true);
-  };
 
   const handleSaveSensorDetails = () => {
     const newName: string | undefined = inputRef.current?.value.trim();
@@ -55,7 +51,7 @@ const SensorItemDetails = ({
         {isEditing ? (
           <button onClick={() => handleSaveSensorDetails()}>Save</button>
         ) : (
-          <button onClick={() => handleEditSensorDetails()}>Edit</button>
+          <button onClick={() => setIsEditing(true)}>Edit</button>
         )}
         <button onClick={() => onDeleteSensor(sensor.id)}>Delete</button>
       </span>
