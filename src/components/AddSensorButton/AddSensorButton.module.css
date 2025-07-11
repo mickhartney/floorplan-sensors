@@ -1,0 +1,31 @@
+
+.addNewSensorButton,
+.cancelNewSensorButton {
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: #1c912d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 12px;
+  cursor: pointer;
+
+  &:hover {
+    background: #259c33;
+  }
+}
+
+.addNewSensorButton:disabled {
+  background: #cebfbf;
+  cursor: not-allowed;
+}
+
+.cancelNewSensorButton {
+  background: red;
+
+  &:hover {
+    background: #dc3131;
+  }
+}

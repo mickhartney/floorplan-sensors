@@ -25,7 +25,12 @@
   }
 }
 
+.imageContainer {
+  display: flex; /* hug image - fixes minor spacing issue */
+}
+
 .floorplanImage {
   width: 100%;
+  height: auto;
   border-radius: 6px;
 }
