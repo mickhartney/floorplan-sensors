@@ -3,14 +3,6 @@ import Floorplan from "./components/FloorPlan/Floorplan";
 import Sidebar from "./components/SideBar/SideBar";
 import styles from "./App.module.css";
 
-// TODO:
-//  fix move sensor position when zoomed in
-//  add store (parent metadata)
-//  persist sensors in local storage
-//  test/refactor...
-//  ----
-//  image upload
-
 export type SensorType = {
   id: number;
   name: string;

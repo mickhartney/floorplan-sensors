@@ -1,5 +1,6 @@
 import React from "react";
 import type { SensorType } from "../../App";
+import { useTransformContext } from "react-zoom-pan-pinch";
 import styles from "./Sensor.module.css";
 
 type SensorProps = {
@@ -10,6 +11,7 @@ type SensorProps = {
 
 const Sensor = ({ sensor, label, onDrag }: SensorProps) => {
   const [isDragging, setIsDragging] = React.useState(false);
+  const { transformState } = useTransformContext();
 
   const handleMouseDown = (e: React.MouseEvent, sensorId: number) => {
     e.preventDefault();
@@ -21,15 +23,14 @@ const Sensor = ({ sensor, label, onDrag }: SensorProps) => {
     const initialY = e.clientY;
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
-      const deltaX = moveEvent.clientX - initialX;
-      const deltaY = moveEvent.clientY - initialY;
+      const currentScale = transformState.scale;
+      const deltaX = (moveEvent.clientX - initialX) / currentScale;
+      const deltaY = (moveEvent.clientY - initialY) / currentScale;
 
       // Prevent moving outside the bounds
       if (sensor.position.x + deltaX < 0 || sensor.position.y + deltaY < 0) {
         return;
       }
-
-      // FIXME: factor in image zoom level and pan position??!
 
       onDrag(sensorId, {
         x: sensor.position.x + deltaX,
