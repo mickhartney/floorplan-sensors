@@ -1,5 +1,9 @@
 import React, { useEffect, useRef } from "react";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import {
+  TransformComponent,
+  TransformWrapper,
+  type ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 import useSensorStore from "../../store/useSensorStore.tsx";
 import Sensor from "../Sensor/Sensor";
@@ -7,6 +11,7 @@ import floorplanImageSrc from "/test_floorplan01.png";
 import styles from "./Floorplan.module.css";
 
 const Floorplan = () => {
+  const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -54,20 +59,30 @@ const Floorplan = () => {
   }, [setFloorplanImageData]);
 
   const handleAddNewSensor = (e: React.MouseEvent) => {
-    if (!sensorCreationMode) return console.warn("Adding not enabled.");
+    if (!sensorCreationMode) {
+      console.warn("Adding not enabled.");
+      return;
+    }
 
     const newSensorName = prompt("Enter sensor name:") || "Unnamed Sensor";
     const containerBounds = imageContainerRef.current?.getBoundingClientRect();
-    if (!containerBounds) return console.warn("No bounds found.");
+    const transformRef = transformComponentRef.current;
+
+    if (!containerBounds || !transformRef) {
+      console.warn("No bounds or transform ref found.");
+      return;
+    }
+
+    const scale = transformRef.instance.transformState.scale;
+    const x = (e.clientX - containerBounds.left) / scale;
+    const y = (e.clientY - containerBounds.top) / scale;
 
     createSensor({
       id: Math.ceil(Math.random() * 10000),
       name: newSensorName,
-      position: {
-        x: e.clientX - containerBounds.left,
-        y: e.clientY - containerBounds.top,
-      },
+      position: { x, y },
     });
+
     setSensorCreationMode(false);
   };
 
@@ -76,6 +91,7 @@ const Floorplan = () => {
       initialScale={1}
       initialPositionX={0}
       initialPositionY={0}
+      ref={transformComponentRef}
     >
       {({ zoomIn, zoomOut, resetTransform }) => (
         <div className={styles.transformContainer}>

@@ -1,9 +1,6 @@
 import { create } from "zustand";
 
-// TODO:
-//  zoom add bug
-//  persist to localStorage
-//  API support
+// TODO: persist to localStorage, API support
 
 export type SensorType = {
   id: number;
