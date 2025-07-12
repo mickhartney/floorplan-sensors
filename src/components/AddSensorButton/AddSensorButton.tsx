@@ -3,41 +3,44 @@ import { useShallow } from "zustand/react/shallow";
 import styles from "./AddSensorButton.module.css";
 
 const AddSensorButton = () => {
-  const { sensors, sensorCreationMode, setSensorCreationMode } = useSensorStore(
-    useShallow(({ sensors, sensorCreationMode, setSensorCreationMode }) => ({
-      sensors,
-      sensorCreationMode,
-      setSensorCreationMode,
-    })),
-  );
+  const { sensors, isSensorCreationMode, setIsSensorCreationMode } =
+    useSensorStore(
+      useShallow(
+        ({ sensors, isSensorCreationMode, setIsSensorCreationMode }) => ({
+          sensors,
+          isSensorCreationMode,
+          setIsSensorCreationMode,
+        }),
+      ),
+    );
 
   const enableAddNewSensor = () => {
     if (sensors.length >= 10) {
       console.warn("Max sensors reached.");
       return;
     }
-    setSensorCreationMode(true);
+    setIsSensorCreationMode(true);
   };
 
-  const buttonText = sensorCreationMode
+  const buttonText = isSensorCreationMode
     ? "Cancel New Sensor"
     : sensors.length >= 10
       ? "Maximum sensors reached"
       : "Add New Sensor";
 
-  const buttonClass = sensorCreationMode
+  const buttonClass = isSensorCreationMode
     ? styles.cancelNewSensorButton
     : styles.addNewSensorButton;
 
-  const handleClick = sensorCreationMode
-    ? () => setSensorCreationMode(false)
+  const handleClick = isSensorCreationMode
+    ? () => setIsSensorCreationMode(false)
     : enableAddNewSensor;
 
   return (
     <button
       className={buttonClass}
       onClick={handleClick}
-      disabled={!sensorCreationMode && sensors.length >= 10}
+      disabled={!isSensorCreationMode && sensors.length >= 10}
     >
       {buttonText}
     </button>

@@ -15,9 +15,9 @@ type SensorProps = {
 const Sensor = ({ sensor, label, containerRef }: SensorProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const { transformState } = useTransformContext();
-  const { sensorCreationMode, updateSensor } = useSensorStore(
-    useShallow(({ sensorCreationMode, updateSensor }) => ({
-      sensorCreationMode,
+  const { isSensorCreationMode, updateSensor } = useSensorStore(
+    useShallow(({ isSensorCreationMode, updateSensor }) => ({
+      isSensorCreationMode,
       updateSensor,
     })),
   );
@@ -66,15 +66,19 @@ const Sensor = ({ sensor, label, containerRef }: SensorProps) => {
 
   return (
     <div
-      title={sensorCreationMode ? "" : "Drag to reposition"}
+      title={isSensorCreationMode ? "" : "Drag to reposition"}
       className={styles.sensor}
       style={{
         left: sensor.position.x,
         top: sensor.position.y,
-        cursor: sensorCreationMode ? "unset" : isDragging ? "grabbing" : "grab",
+        cursor: isSensorCreationMode
+          ? "unset"
+          : isDragging
+            ? "grabbing"
+            : "grab",
         opacity: isDragging ? 0.6 : 1,
       }}
-      onMouseDown={!sensorCreationMode ? handleMouseDown : undefined}
+      onMouseDown={!isSensorCreationMode ? handleMouseDown : undefined}
     >
       {label}
     </div>

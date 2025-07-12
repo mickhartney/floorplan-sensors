@@ -18,23 +18,23 @@ const Floorplan = () => {
   const {
     sensors,
     createSensor,
-    sensorCreationMode,
-    setSensorCreationMode,
-    setFloorplanImageData,
+    isSensorCreationMode,
+    setIsSensorCreationMode,
+    setImageData,
   } = useSensorStore(
     useShallow(
       ({
         sensors,
         createSensor,
-        sensorCreationMode,
-        setSensorCreationMode,
-        setFloorplanImageData,
+        isSensorCreationMode,
+        setIsSensorCreationMode,
+        setImageData,
       }) => ({
         sensors,
         createSensor,
-        sensorCreationMode,
-        setSensorCreationMode,
-        setFloorplanImageData,
+        isSensorCreationMode,
+        setIsSensorCreationMode,
+        setImageData,
       }),
     ),
   );
@@ -47,7 +47,7 @@ const Floorplan = () => {
       const containerBounds = imgEl.getBoundingClientRect();
       if (!containerBounds) return console.warn("No bounds found.");
 
-      setFloorplanImageData({
+      setImageData({
         src: floorplanImageSrc.slice(1), // remove leading slash (assumes image is in `public` folder)
         displayWidth: containerBounds.width,
         displayHeight: containerBounds.height,
@@ -56,10 +56,10 @@ const Floorplan = () => {
 
     imgEl.addEventListener("load", handleImageLoad);
     return () => imgEl.removeEventListener("load", handleImageLoad);
-  }, [setFloorplanImageData]);
+  }, [setImageData]);
 
   const handleAddNewSensor = (e: React.MouseEvent) => {
-    if (!sensorCreationMode) {
+    if (!isSensorCreationMode) {
       console.warn(
         "Adding new sensor not enabled. Click 'Add New Sensor' first.",
       );
@@ -84,7 +84,7 @@ const Floorplan = () => {
       position: { x, y },
     });
 
-    setSensorCreationMode(false);
+    setIsSensorCreationMode(false);
   };
 
   return (
@@ -104,8 +104,8 @@ const Floorplan = () => {
           <TransformComponent>
             <div
               ref={imageContainerRef}
-              onClick={sensorCreationMode ? handleAddNewSensor : undefined}
-              style={sensorCreationMode ? { cursor: "crosshair" } : undefined}
+              onClick={isSensorCreationMode ? handleAddNewSensor : undefined}
+              style={isSensorCreationMode ? { cursor: "crosshair" } : undefined}
               className={styles.imageContainer}
             >
               <img
