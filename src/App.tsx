@@ -1,8 +1,17 @@
+import { useEffect } from "react";
+import useSensorStore from "./store/useSensorStore.tsx";
 import Floorplan from "./components/FloorPlan/Floorplan";
 import Sidebar from "./components/SideBar/SideBar";
 import styles from "./App.module.css";
 
 function App() {
+  const loadSensors = useSensorStore((state) => state.loadSensors);
+
+  useEffect(() => {
+    // Get initial sensors from localStorage (or API in the future)
+    loadSensors();
+  }, [loadSensors]);
+
   return (
     <div>
       <header className={styles.header}>

@@ -16,13 +16,17 @@ const Sidebar = () => {
         existing sensor, click and drag it on the floorplan.
       </p>
 
-      <ol className={styles.sensorList}>
-        {sensors.map((sensor) => (
-          <li key={sensor.id}>
-            <SensorItemDetails sensor={sensor} />
-          </li>
-        ))}
-      </ol>
+      {sensors.length > 0 ? (
+        <ol className={styles.sensorList}>
+          {sensors.map((sensor) => (
+            <li key={sensor.id}>
+              <SensorItemDetails sensor={sensor} />
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p>No sensors added yet.</p>
+      )}
     </div>
   );
 };

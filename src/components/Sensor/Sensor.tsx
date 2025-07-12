@@ -37,6 +37,7 @@ const Sensor = ({ sensor, label, containerRef }: SensorProps) => {
       const deltaX = (moveEvent.clientX - initialX) / scale;
       const deltaY = (moveEvent.clientY - initialY) / scale;
 
+      // Ensure sensor stays within bounds
       if (
         bounds &&
         sensor.position.x + deltaX >= 0 &&
@@ -65,7 +66,7 @@ const Sensor = ({ sensor, label, containerRef }: SensorProps) => {
 
   return (
     <div
-      title={sensorCreationMode ? "Sensor exists" : "Drag to reposition"}
+      title={sensorCreationMode ? "" : "Drag to reposition"}
       className={styles.sensor}
       style={{
         left: sensor.position.x,

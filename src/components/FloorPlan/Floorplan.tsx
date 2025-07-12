@@ -48,7 +48,7 @@ const Floorplan = () => {
       if (!containerBounds) return console.warn("No bounds found.");
 
       setFloorplanImageData({
-        src: floorplanImageSrc.slice(1),
+        src: floorplanImageSrc.slice(1), // remove leading slash (assumes image is in `public` folder)
         displayWidth: containerBounds.width,
         displayHeight: containerBounds.height,
       });
@@ -60,11 +60,13 @@ const Floorplan = () => {
 
   const handleAddNewSensor = (e: React.MouseEvent) => {
     if (!sensorCreationMode) {
-      console.warn("Adding not enabled.");
+      console.warn(
+        "Adding new sensor not enabled. Click 'Add New Sensor' first.",
+      );
       return;
     }
 
-    const newSensorName = prompt("Enter sensor name:") || "Unnamed Sensor";
+    const newSensorName = prompt("Enter sensor name:") || "";
     const containerBounds = imageContainerRef.current?.getBoundingClientRect();
     const transformRef = transformComponentRef.current;
 
@@ -78,7 +80,6 @@ const Floorplan = () => {
     const y = (e.clientY - containerBounds.top) / scale;
 
     createSensor({
-      id: Math.ceil(Math.random() * 10000),
       name: newSensorName,
       position: { x, y },
     });
@@ -110,17 +111,18 @@ const Floorplan = () => {
               <img
                 ref={imageRef}
                 src={floorplanImageSrc}
-                alt="Floorplan"
+                alt="Floorplan" // get this from props or store in the future
                 className={styles.floorplanImage}
               />
-              {sensors.map((sensor, index) => (
-                <Sensor
-                  key={sensor.id}
-                  sensor={sensor}
-                  label={(index + 1).toString()}
-                  containerRef={imageContainerRef}
-                />
-              ))}
+              {sensors.length > 0 &&
+                sensors.map((sensor, index) => (
+                  <Sensor
+                    key={sensor.id}
+                    sensor={sensor}
+                    label={(index + 1).toString()}
+                    containerRef={imageContainerRef}
+                  />
+                ))}
             </div>
           </TransformComponent>
         </div>
