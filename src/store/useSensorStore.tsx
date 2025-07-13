@@ -9,13 +9,13 @@ import { persist, createJSONStorage } from "zustand/middleware";
 //  - Add reset method
 //  - Add image upload functionality
 
-// Crude Mock API just to demonstrate data flow
 type ApiCallType =
   | "setImageData"
   | "createSensor"
   | "updateSensor"
   | "deleteSensor";
 
+// Crude Mock API just to demonstrate data flow
 const mockApiCall = (type: ApiCallType, payload: unknown) => {
   console.log(`Mock API call: ${type}`, payload);
 };
@@ -48,6 +48,8 @@ type SensorStore = {
   ) => void;
   deleteSensor: (sensorId: number) => void;
 };
+
+export const MAX_SENSORS = 10;
 
 const useSensorStore = create<SensorStore>()(
   persist(
@@ -85,8 +87,8 @@ const useSensorStore = create<SensorStore>()(
         const currentSensors = get().sensors;
 
         // Crude error handling for now
-        if (currentSensors.length >= 10) {
-          alert("Maximum of 10 sensors allowed.");
+        if (currentSensors.length >= MAX_SENSORS) {
+          alert(`Maximum of ${MAX_SENSORS} sensors allowed.`);
           return;
         }
 
@@ -122,7 +124,7 @@ const useSensorStore = create<SensorStore>()(
 
           // Simulate API call to update the sensor - after local state update
           // FIXME: prevent excessive calls on sensor drag
-          //  - add draft method (no api call) and then commit method (with api call) ?
+          //  - split into updateSensorDraft (no api call) and commitSensorUpdate methods (api call)
           //  - refactor Sensor.tsx accordingly
           mockApiCall("updateSensor", {
             floorplanId: state.floorplanId,

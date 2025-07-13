@@ -1,4 +1,4 @@
-import useSensorStore from "../../store/useSensorStore.tsx";
+import useSensorStore, { MAX_SENSORS } from "../../store/useSensorStore.tsx";
 import { useShallow } from "zustand/react/shallow";
 import styles from "./AddSensorButton.module.css";
 
@@ -14,9 +14,11 @@ const AddSensorButton = () => {
       ),
     );
 
+  const isMaxSensorsReached = sensors.length >= MAX_SENSORS;
+
   const enableAddNewSensor = () => {
-    if (sensors.length >= 10) {
-      console.warn("Max sensors reached.");
+    if (isMaxSensorsReached) {
+      console.warn(`Maximum ${MAX_SENSORS} sensors reached.`);
       return;
     }
     setIsSensorCreationMode(true);
@@ -24,8 +26,8 @@ const AddSensorButton = () => {
 
   const buttonText = isSensorCreationMode
     ? "Cancel New Sensor"
-    : sensors.length >= 10
-      ? "Maximum sensors reached"
+    : isMaxSensorsReached
+      ? `Maximum ${MAX_SENSORS} sensors reached`
       : "Add New Sensor";
 
   const buttonClass = isSensorCreationMode
@@ -40,7 +42,7 @@ const AddSensorButton = () => {
     <button
       className={buttonClass}
       onClick={handleClick}
-      disabled={!isSensorCreationMode && sensors.length >= 10}
+      disabled={!isSensorCreationMode && isMaxSensorsReached}
     >
       {buttonText}
     </button>

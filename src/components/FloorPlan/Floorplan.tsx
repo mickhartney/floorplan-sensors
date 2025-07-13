@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import {
   TransformComponent,
   TransformWrapper,
@@ -39,24 +39,19 @@ const Floorplan = () => {
     ),
   );
 
-  useEffect(() => {
+  const handleImageLoad = () => {
     const imgEl = imageRef.current;
     if (!imgEl) return;
 
-    const handleImageLoad = () => {
-      const containerBounds = imgEl.getBoundingClientRect();
-      if (!containerBounds) return console.warn("No bounds found.");
+    const containerBounds = imgEl.getBoundingClientRect();
+    if (!containerBounds) return console.warn("No bounds found.");
 
-      setImageData({
-        src: floorplanImageSrc.slice(1), // remove leading slash (assumes image is in `public` folder)
-        displayWidth: containerBounds.width,
-        displayHeight: containerBounds.height,
-      });
-    };
-
-    imgEl.addEventListener("load", handleImageLoad);
-    return () => imgEl.removeEventListener("load", handleImageLoad);
-  }, [setImageData]);
+    setImageData({
+      src: floorplanImageSrc,
+      displayWidth: containerBounds.width,
+      displayHeight: containerBounds.height,
+    });
+  };
 
   const handleAddNewSensor = (e: React.MouseEvent) => {
     if (!isSensorCreationMode) {
@@ -111,7 +106,8 @@ const Floorplan = () => {
               <img
                 ref={imageRef}
                 src={floorplanImageSrc}
-                alt="Floorplan" // get this from props or store in the future
+                onLoad={handleImageLoad}
+                alt="Floorplan image" // get this from props or store in the future
                 className={styles.floorplanImage}
               />
               {sensors.length > 0 &&
